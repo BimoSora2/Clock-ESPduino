@@ -1,0 +1,288 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock Settings</title>
+    <link rel="stylesheet" href="assets/css/foundation.css">
+</head>
+<body>
+    <div class="grid-container">
+        <div class="grid-x grid-padding-x">
+            <div class="large-12 text-center cell">
+                <div class="grid-x grid-padding-y">
+                    <div class="large-12 cell">
+                        <h3>Clock Settings</h3>
+                    </div>
+                </div>
+
+                <div class="grid-x grid-padding-x">
+                    <div class="large-12 cell">
+
+                        <div class="grid-x grid-padding-x">
+                            <div class="large-8 medium-8 center cell">
+                                <div class="callout">
+                                    <div class="grid-x grid-margin-x align-middle">
+                                        <div class="large-6 medium-6 cell">
+                                            <div class="grid-x grid-padding-x">
+                                                <div class="large-12 medium-12 small-12 cell">
+                                                    WiFi Settings
+                                                    <div class="grid-x grid-margin-x">
+                                                        <div class="large-12 medium-12 small-12 cell">
+                                                            <input type="text" id="wifiSSID" placeholder="WiFi SSID">
+                                                        </div>
+                                                        <div class="large-12 medium-12 small-12 cell">
+                                                            <input type="password" id="wifiPassword" placeholder="WiFi Password">
+                                                        </div>
+                                                        <div class="large-12 medium-12 small-12 cell">
+                                                            <button class="submit success button" onclick="setWiFi()">Set WiFi Credentials</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="large-6 medium-6 cell">
+                                            Access Point Settings
+                                            <div class="grid-x grid-margin-x">
+                                                <div class="large-12 medium-12 small-12 cell">
+                                                    <input type="text" id="apSSID" placeholder="AP SSID">
+                                                </div>
+                                                <div class="large-12 medium-12 small-12 cell">
+                                                    <input type="password" id="apPassword" placeholder="AP Password">
+                                                </div>
+                                                <div class="large-12 medium-12 small-12 cell">
+                                                    <button class="submit success button" onclick="setAP()">Set AP Credentials</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid-x grid-padding-y">
+                                        <div class="large-12 medium-12 small-12 cell">
+                                            <div class="callout">
+                                                <div class="grid-x grid-margin-x">
+                                                    <div class="large-12 medium-12 small-12 cell">
+                                                        <h4>Device Status</h4>
+                                                        <p>WiFi Name: <span id="wifiName"></span></p>
+                                                        <p>IP Address: <span id="ipAddress"></span></p>
+                                                        <p>NTP Server Status: <span id="ntpStatus"></span></p>
+                                                        <p>Current Time: <span id="currentTime"></span></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid-x grid-padding-x">
+                            <div class="large-8 medium-8 center cell">
+                                <div class="callout">
+                                    <div class="grid-x grid-margin-x align-middle">
+                                        <div class="large-6 medium-6 small-6 cell">
+                                            <div class="grid-x grid-margin-x">
+                                                <div class="large-12 medium-12 small-12 cell">
+                                                    Manual
+                                                    <div class="grid-x grid-margin-x">
+                                                        <div class="large-12 medium-12 small-12 cell">
+                                                            <button class="submit success button" onclick="syncTime()">Sync Time</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="large-6 medium-6 small-6 cell">
+                                            <div class="grid-x grid-margin-x">
+                                                <div class="large-12 medium-12 small-12 cell">
+                                                    NTP
+                                                    <div class="grid-x grid-margin-x">
+                                                        <div class="large-12 medium-12 small-12 cell">
+                                                            <input type="text" id="ntpServer" placeholder="NTP Server">
+                                                        </div>
+                                                        <div class="large-12 medium-12 small-12 cell">
+                                                            <button class="submit success button" onclick="setNTPServer()">Set NTP Server</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid-x grid-padding-x">
+                            <div class="large-8 medium-8 sall-12 center cell">
+                                <div class="grid-x grid-margin-x">
+                                    <div class="large-12 medium-12 small-12 cell">
+                                        <div class="callout alert">
+                                            <h4>Reset All Settings</h4>
+                                            <p>This will reset all settings (WiFi, NTP, and AP) to their default values. The device will restart after resetting.</p>
+                                            <button class="alert button" onclick="resetSettings()">Reset All Settings</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function resetSettings() {
+            if (confirm("Are you sure you want to reset all settings? This action cannot be undone.")) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "/reset", true);
+                xhr.onload = function() {
+                    if (xhr.status == 200) {
+                        alert("All settings have been reset. The device will restart.");
+                    } else {
+                        alert("Failed to reset settings");
+                    }
+                };
+                xhr.send();
+            }
+        }
+
+        function validateSSID(ssid) {
+            return ssid.length >= 1;
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
+        function setAP() {
+            var ssid = document.getElementById("apSSID").value;
+            var password = document.getElementById("apPassword").value;
+
+            if (!validateSSID(ssid)) {
+                alert("AP SSID must be at least 1 character long.");
+                return;
+            }
+            if (!validatePassword(password)) {
+                alert("AP Password must be at least 8 characters long.");
+                return;
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/setap", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send("ssid=" + encodeURIComponent(ssid) + "&password=" + encodeURIComponent(password));
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    alert("AP credentials updated successfully. The device will restart.");
+                } else {
+                    alert("Failed to update AP credentials");
+                }
+            };
+        }
+
+        function setWiFi() {
+            var ssid = document.getElementById("wifiSSID").value;
+            var password = document.getElementById("wifiPassword").value;
+
+            if (!validateSSID(ssid)) {
+                alert("WiFi SSID must be at least 1 character long.");
+                return;
+            }
+            if (!validatePassword(password)) {
+                alert("WiFi Password must be at least 8 characters long.");
+                return;
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/setwifi", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send("ssid=" + encodeURIComponent(ssid) + "&password=" + encodeURIComponent(password));
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    alert("WiFi credentials updated successfully. The device will restart.");
+                } else {
+                    alert("Failed to update WiFi credentials");
+                }
+            };
+        }
+
+        function syncTime() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/settime", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            var date = new Date();
+            var hours = date.getHours();
+            var minutes = date.getMinutes();
+            var currentTime = hours + ":" + minutes;
+            xhr.send("time=" + encodeURIComponent(currentTime));
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    alert("Time synced successfully");
+                } else {
+                    alert("Failed to sync time");
+                }
+            };
+        }
+
+        function getNTPServer() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/getntpserver", true);
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    document.getElementById("ntpServer").value = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
+
+        function setNTPServer() {
+            var server = document.getElementById("ntpServer").value;
+
+            if (server.trim() === "") {
+                alert("NTP Server cannot be empty.");
+                return;
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/setntpserver", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send("server=" + encodeURIComponent(server));
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    alert("NTP server updated successfully");
+                } else {
+                    alert("Failed to update NTP server");
+                }
+            };
+        }
+
+        function getDeviceStatus() {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                if (xhr.status == 200) {
+                    var status = JSON.parse(xhr.responseText);
+                    document.getElementById("wifiName").innerText = status.ssid;
+                    document.getElementById("ipAddress").innerText = status.ip;
+                    document.getElementById("ntpStatus").innerText = status.ntpConnected ? "Connected" : "Not Connected";
+                    document.getElementById("currentTime").innerText = status.currentTime;
+                }
+            };
+            xhr.open("GET", "/devicestatus", true);
+            xhr.send();
+        }
+
+        function startAutoRefresh(interval) {
+            getDeviceStatus();
+            setInterval(getDeviceStatus, interval);
+        }
+
+        window.onload = function() {
+            getNTPServer();
+            startAutoRefresh(5000);
+        };
+    </script>
+</body>
+</html>
