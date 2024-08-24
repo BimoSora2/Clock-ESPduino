@@ -1,4 +1,4 @@
-# Clock-ESP
+# Wifi-ESP-Manager
 1. Kode mendukung ESP8266 dan ESP32
 2. Terdapat fitur ubah
    - WiFi AP
